@@ -32,12 +32,8 @@ namespace DocumentTranslation.GUI
             viewModel.OnKeyVaultAuthenticationComplete += ViewModel_OnKeyVaultAuthenticationComplete;
             AppSettingsSetter.SettingsReadComplete += AppSettingsSetter_SettingsReadComplete;
             ViewModel = viewModel;
-            toLanguageBox.ItemsSource = ViewModel.ToLanguageList;
-            fromLanguageBox.ItemsSource = ViewModel.FromLanguageList;
-            toLanguageBoxDocuments.ItemsSource = ViewModel.ToLanguageListForDocuments;
             fromLanguageBoxDocuments.ItemsSource = ViewModel.FromLanguageListForDocuments;
             CategoryDocumentsBox.ItemsSource = ViewModel.categories.MyCategoryList;
-            CategoryTextBox.ItemsSource = ViewModel.categories.MyCategoryList;
         }
 
 
@@ -54,19 +50,17 @@ namespace DocumentTranslation.GUI
 
         private void ViewModel_OnLanguagesUpdate(object sender, EventArgs e)
         {
-            toLanguageBox.SelectedValue = ViewModel.UISettings.lastToLanguage;
-            if (ViewModel.UISettings.lastFromLanguage is not null)
-                fromLanguageBox.SelectedValue = ViewModel.UISettings.lastFromLanguage;
-            else fromLanguageBox.SelectedIndex = 0;
-            if (ViewModel.UISettings.lastToLanguagesDocuments is not null)
-                foreach (string lang in ViewModel.UISettings.lastToLanguagesDocuments)
-                    foreach (Language l in toLanguageBoxDocuments.Items)
-                        if (l.LangCode == lang) l.IsChecked = true;
+            //toLanguageBox.SelectedValue = ViewModel.UISettings.lastToLanguage;
+            //if (ViewModel.UISettings.lastFromLanguage is not null)
+            //    fromLanguageBox.SelectedValue = ViewModel.UISettings.lastFromLanguage;
+            //else fromLanguageBox.SelectedIndex = 0;
             if (ViewModel.UISettings.lastFromLanguageDocuments is not null)
                 fromLanguageBoxDocuments.SelectedValue = ViewModel.UISettings.lastFromLanguageDocuments;
             else fromLanguageBoxDocuments.SelectedIndex = 0;
-            _ = SelectedToLanguages();
-            ScrollToLanguages();
+
+            // Removed multiple To language support
+            //_ = SelectedToLanguages();
+            //ScrollToLanguages();
         }
 
         private void AppSettingsSetter_SettingsReadComplete(object sender, EventArgs e)
@@ -74,16 +68,17 @@ namespace DocumentTranslation.GUI
             EnableTabs();
         }
 
-        private async void ScrollToLanguages()
-        {
-            await Task.Delay(200);
-            foreach (Language l in toLanguageBoxDocuments.Items)
-                if (l.IsChecked)
-                {
-                    toLanguageBoxDocuments.ScrollIntoView(l);
-                    return;
-                }
-        }
+        // Remove ToLanguage scroll
+        //private async void ScrollToLanguages()
+        //{
+        //    await Task.Delay(200);
+        //    foreach (Language l in toLanguageBoxDocuments.Items)
+        //        if (l.IsChecked)
+        //        {
+        //            toLanguageBoxDocuments.ScrollIntoView(l);
+        //            return;
+        //        }
+        //}
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
@@ -97,13 +92,13 @@ namespace DocumentTranslation.GUI
             {
                 SettingsTab.IsSelected = true;
                 TranslateDocumentsTab.IsEnabled = false;
-                if (ex.ParamName is "SubscriptionKey" or null) TranslateTextTab.IsEnabled = false;
+                //if (ex.ParamName is "SubscriptionKey" or null) TranslateTextTab.IsEnabled = false;
             }
             catch (KeyVaultAccessException ex)
             {
                 SettingsTab.IsSelected = true;
                 TranslateDocumentsTab.IsEnabled = false;
-                TranslateTextTab.IsEnabled = false;
+                //TranslateTextTab.IsEnabled = false;
                 System.Resources.ResourceManager resx = new("DocumentTranslation.GUI.Properties.Resources", System.Reflection.Assembly.GetExecutingAssembly());
                 StatusBarSText2.Text = ex.Message;
             }
@@ -111,7 +106,7 @@ namespace DocumentTranslation.GUI
             {
                 SettingsTab.IsSelected = true;
                 TranslateDocumentsTab.IsEnabled = false;
-                TranslateTextTab.IsEnabled = false;
+                //TranslateTextTab.IsEnabled = false;
                 StatusBarSText1.Text = Properties.Resources.msg_TestFailed;
                 StatusBarSText2.Text = ex.InnerException.Message;
             }
@@ -121,7 +116,7 @@ namespace DocumentTranslation.GUI
                 StatusBarText2.Text = ex.Message;
             }
             CategoryDocumentsBox.SelectedValue = ViewModel.UISettings.lastCategoryDocuments;
-            CategoryTextBox.SelectedValue = ViewModel.UISettings.lastCategoryText;
+            //CategoryTextBox.SelectedValue = ViewModel.UISettings.lastCategoryText;
             ViewModel_OnLanguagesUpdate(this, EventArgs.Empty);
         }
 
@@ -133,13 +128,8 @@ namespace DocumentTranslation.GUI
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (toLanguageBox.SelectedIndex >= 0) ViewModel.UISettings.lastToLanguage = toLanguageBox.SelectedValue as string;
-            if (fromLanguageBox.SelectedIndex >= 0) ViewModel.UISettings.lastFromLanguage = fromLanguageBox.SelectedValue as string;
-            if (fromLanguageBox.SelectedIndex >= 0) ViewModel.UISettings.lastFromLanguageDocuments = fromLanguageBoxDocuments.SelectedValue as string;
             if (CategoryDocumentsBox.SelectedItem is not null) ViewModel.UISettings.lastCategoryDocuments = ((MyCategory)CategoryDocumentsBox.SelectedItem).Name ?? string.Empty;
             else ViewModel.UISettings.lastCategoryDocuments = null;
-            if (CategoryTextBox.SelectedItem is not null) ViewModel.UISettings.lastCategoryText = ((MyCategory)CategoryTextBox.SelectedItem).Name ?? string.Empty;
-            else ViewModel.UISettings.lastCategoryText = null;
             ViewModel.SaveUISettings();
         }
 
@@ -147,11 +137,17 @@ namespace DocumentTranslation.GUI
         private async void EnableTabs()
         {
             await Task.Delay(10);
-            TranslateTextTab.IsEnabled = true;
+            
+            // Removed support for Text Translation
+            //TranslateTextTab.IsEnabled = true;
+            
             TranslateDocumentsTab.IsEnabled = true;
-            if (string.IsNullOrEmpty(ViewModel.Settings.SubscriptionKey)) { TranslateDocumentsTab.IsEnabled = false; TranslateTextTab.IsEnabled = false; return; }
+            if (string.IsNullOrEmpty(ViewModel.Settings.SubscriptionKey)) { TranslateDocumentsTab.IsEnabled = false; /*TranslateTextTab.IsEnabled = false;*/ return; }
             if (string.IsNullOrEmpty(ViewModel.Settings.ConnectionStrings.StorageConnectionString)) TranslateDocumentsTab.IsEnabled = false;
-            if (string.IsNullOrEmpty(ViewModel.Settings.AzureRegion)) TranslateTextTab.IsEnabled = false;
+
+            // Removed support for Text Translation
+            //if (string.IsNullOrEmpty(ViewModel.Settings.AzureRegion)) TranslateTextTab.IsEnabled = false;
+
             if (string.IsNullOrEmpty(ViewModel.Settings.AzureResourceName)) TranslateDocumentsTab.IsEnabled = false;
             if (ViewModel.localSettings.UsingKeyVault)
             {
@@ -163,7 +159,9 @@ namespace DocumentTranslation.GUI
                 region.Text = ViewModel.localSettings.AzureRegion;
                 storageConnectionString.Text = ViewModel.localSettings.ConnectionStrings.StorageConnectionString;
                 resourceName.Text = ViewModel.localSettings.AzureResourceName;
-                textTransEndpoint.Text = ViewModel.localSettings.TextTransEndpoint;
+
+                // Removed support for Text Translation
+                //textTransEndpoint.Text = ViewModel.localSettings.TextTransEndpoint;
             }
         }
 
@@ -268,12 +266,11 @@ namespace DocumentTranslation.GUI
         {
             string targetfolder = ViewModel.TargetFolder;
             if (targetfolder.Contains('*'))
-                foreach (Language lang in toLanguageBoxDocuments.Items)
-                    if (lang.IsChecked)
-                    {
-                        targetfolder = targetfolder.Replace("*", lang.LangCode);
-                        break;
-                    }
+            {
+                // Only one target of To language
+                targetfolder = targetfolder.Replace("*", ViewModel.ToLanguage.LangCode);
+            }
+
             if (!String.IsNullOrEmpty(targetfolder)) Process.Start("explorer.exe", targetfolder);
         }
 
@@ -290,8 +287,7 @@ namespace DocumentTranslation.GUI
         private void SetTranslateDocumentsButtonStatus()
         {
             if ((ViewModel.FilesToTranslate.Count > 0)
-                && (!string.IsNullOrEmpty(TargetTextBox.Text))
-                && (SelectedToLanguages().Count >= 0))
+                && (!string.IsNullOrEmpty(TargetTextBox.Text)))
                 translateDocumentsButton.IsEnabled = true;
             else translateDocumentsButton.IsEnabled = false;
         }
@@ -299,7 +295,7 @@ namespace DocumentTranslation.GUI
         private void DocumentsTranslateButton_Click(object sender, RoutedEventArgs e)
         {
             ResetUI();
-            List<string> tolanguages = SelectedToLanguages();
+            List<string> tolanguages = new List<string>() { ViewModel.ToLanguage.LangCode};
             if (tolanguages.Count < 1) return;
             if (ViewModel.FilesToTranslate.Count == 0) return;
             CancelButton.IsEnabled = true;
@@ -324,8 +320,7 @@ namespace DocumentTranslation.GUI
             }
             ViewModel.UISettings.lastFromLanguageDocuments = fromLanguageBoxDocuments.SelectedValue as string;
             ViewModel.UISettings.lastToLanguagesDocuments.Clear();
-            foreach (Language l in toLanguageBoxDocuments.Items)
-                if (l.IsChecked) ViewModel.UISettings.lastToLanguagesDocuments.Add(l.LangCode);
+            ViewModel.UISettings.lastToLanguagesDocuments.Add(ViewModel.ToLanguage.LangCode);
             ViewModel.SaveUISettings();
             if (CategoryDocumentsBox.SelectedItem is not null) ViewModel.documentTranslationService.Category = ((MyCategory)CategoryDocumentsBox.SelectedItem).ID;
             else ViewModel.documentTranslationService.Category = null;
@@ -372,14 +367,15 @@ namespace DocumentTranslation.GUI
             ProgressBar.Value = 3;
         }
 
-        private List<string> SelectedToLanguages()
-        {
-            List<string> tolanguages = new();
-            foreach (Language l in toLanguageBoxDocuments.Items)
-                if (l.IsChecked) tolanguages.Add(l.LangCode);
-            StatusBarText1.Text = tolanguages.Count + ((tolanguages.Count == 1) ? Properties.Resources.msg_LanguageSelected : Properties.Resources.msg_LanguagesSelected);
-            return tolanguages;
-        }
+        // Removed list of check-boxes for "To Language"
+        //private List<string> SelectedToLanguages()
+        //{
+        //    List<string> tolanguages = new();
+        //    foreach (Language l in toLanguageBoxDocuments.Items)
+        //        if (l.IsChecked) tolanguages.Add(l.LangCode);
+        //    StatusBarText1.Text = tolanguages.Count + ((tolanguages.Count == 1) ? Properties.Resources.msg_LanguageSelected : Properties.Resources.msg_LanguagesSelected);
+        //    return tolanguages;
+        //}
 
         private async void DocumentTranslationBusiness_OnHeartBeat(object sender, int e)
         {
@@ -485,38 +481,39 @@ namespace DocumentTranslation.GUI
             StatusBarText2.Text += $" |\t{Properties.Resources.msg_CharactersCharged}{e}";
         }
 
-        private void ToLanguageCheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            ResetUI();
-            List<string> langCodes = SelectedToLanguages();
-            if (langCodes.Count == 1)
-            {
-                if (ViewModel.UISettings.PerLanguageFolders is not null && langCodes[0] is not null) ViewModel.UISettings.PerLanguageFolders.TryGetValue(langCodes[0], out perLanguageData);
-                if (perLanguageData is not null)
-                {
-                    if (perLanguageData.lastTargetFolder is not null) TargetTextBox.Text = perLanguageData.lastTargetFolder;
-                    if (perLanguageData.lastGlossary is not null) GlossariesListBox.Items.Add(perLanguageData.lastGlossary);
-                    else GlossariesListBox.Items.Clear();
-                }
-                else
-                {
-                    GlossariesListBox.Items.Clear();
-                    foreach (Language lang in ViewModel.ToLanguageList)
-                        if (TargetTextBox.Text.ToLowerInvariant().EndsWith("." + lang.LangCode.ToLowerInvariant()))
-                            TargetTextBox.Text = TargetTextBox.Text[..^lang.LangCode.Length] + langCodes[0];
-                }
-                GlossariesToUse_ListChanged(this, null);
-            }
-            if (langCodes.Count > 1)
-            {
-                if (!TargetTextBox.Text.Contains('*'))
-                {
-                    foreach (Language lang in ViewModel.ToLanguageList)
-                        if (TargetTextBox.Text.ToLowerInvariant().EndsWith("." + lang.LangCode.ToLowerInvariant()))
-                            TargetTextBox.Text = TargetTextBox.Text[..^lang.LangCode.Length] + "*";
-                }
-            }
-        }
+        // Removed list of check-boxes for "To Language"
+        //private void ToLanguageCheckBox_Checked(object sender, RoutedEventArgs e)
+        //{
+        //    ResetUI();
+        //    List<string> langCodes = new List<string>() { ViewModel.ToLanguage.LangCode };
+        //    if (langCodes.Count == 1)
+        //    {
+        //        if (ViewModel.UISettings.PerLanguageFolders is not null && langCodes[0] is not null) ViewModel.UISettings.PerLanguageFolders.TryGetValue(langCodes[0], out perLanguageData);
+        //        if (perLanguageData is not null)
+        //        {
+        //            if (perLanguageData.lastTargetFolder is not null) TargetTextBox.Text = perLanguageData.lastTargetFolder;
+        //            if (perLanguageData.lastGlossary is not null) GlossariesListBox.Items.Add(perLanguageData.lastGlossary);
+        //            else GlossariesListBox.Items.Clear();
+        //        }
+        //        else
+        //        {
+        //            GlossariesListBox.Items.Clear();
+        //            foreach (Language lang in ViewModel.ToLanguageList)
+        //                if (TargetTextBox.Text.ToLowerInvariant().EndsWith("." + lang.LangCode.ToLowerInvariant()))
+        //                    TargetTextBox.Text = TargetTextBox.Text[..^lang.LangCode.Length] + langCodes[0];
+        //        }
+        //        GlossariesToUse_ListChanged(this, null);
+        //    }
+        //    if (langCodes.Count > 1)
+        //    {
+        //        if (!TargetTextBox.Text.Contains('*'))
+        //        {
+        //            foreach (Language lang in ViewModel.ToLanguageList)
+        //                if (TargetTextBox.Text.ToLowerInvariant().EndsWith("." + lang.LangCode.ToLowerInvariant()))
+        //                    TargetTextBox.Text = TargetTextBox.Text[..^lang.LangCode.Length] + "*";
+        //        }
+        //    }
+        //}
 
         private void GlossariesClearButton_Click(object sender, RoutedEventArgs e)
         {
@@ -540,82 +537,10 @@ namespace DocumentTranslation.GUI
             ThereWereErrorsButton.Visibility = Visibility.Hidden;
         }
 
-
         #endregion DocumentTranslation
 
-        #region TextTranslation
-        private async void TranslateButton_Click(object sender, RoutedEventArgs e)
-        {
-            ViewModel.documentTranslationService.Category = CategoryTextBox.SelectedItem is not null ? ((MyCategory)CategoryTextBox.SelectedItem).ID : null;
-            try
-            {
-                outputBox.Text = await ViewModel.TranslateTextAsync(inputBox.Text, fromLanguageBox.SelectedValue as string, toLanguageBox.SelectedValue as string);
-                StatusBarTText2.Text = $"{inputBox.Text.Length} {Properties.Resources.msg_TranslateButton_Click_CharactersTranslated}";
-                await Task.Delay(2000);
-                StatusBarTText2.Text = string.Empty;
-            }
-            catch (InvalidCategoryException)
-            {
-                outputBox.Text = string.Empty;
-                StatusBarTText1.Text = Properties.Resources.msg_TranslateButton_Click_Error;
-                StatusBarTText2.Text = Properties.Resources.msg_TranslateButton_Click_InvalidCategory;
-                await Task.Delay(2000);
-                StatusBarTText1.Text = string.Empty;
-                StatusBarTText2.Text = string.Empty;
-            }
-            catch (AccessViolationException ex)
-            {
-                outputBox.Text = string.Empty;
-                StatusBarTText1.Text = Properties.Resources.msg_TranslateButton_Click_Error;
-                StatusBarTText2.Text = ex.Message;
-                await Task.Delay(2000);
-                StatusBarTText1.Text = string.Empty;
-                StatusBarTText2.Text = string.Empty;
-            }
-        }
-
-        private void FromLanguageBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (fromLanguageBox.SelectedItem is not Language lang) return;
-            if (lang.Bidi)
-            {
-                inputBox.TextAlignment = TextAlignment.Right;
-                inputBox.FlowDirection = System.Windows.FlowDirection.RightToLeft;
-                inputBox.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Right;
-            }
-            else
-            {
-                inputBox.TextAlignment = TextAlignment.Left;
-                inputBox.FlowDirection = System.Windows.FlowDirection.LeftToRight;
-                inputBox.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Left;
-            }
-        }
-
-        private void ToLanguageBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (toLanguageBox.SelectedItem is null) return;
-            if ((toLanguageBox.SelectedItem as Language).Bidi)
-            {
-                outputBox.FlowDirection = System.Windows.FlowDirection.RightToLeft;
-                outputBox.TextAlignment = TextAlignment.Right;
-                outputBox.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Right;
-            }
-            else
-            {
-                outputBox.FlowDirection = System.Windows.FlowDirection.LeftToRight;
-                outputBox.TextAlignment = TextAlignment.Left;
-                outputBox.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Left;
-            }
-            SetTranslateDocumentsButtonStatus();
-        }
-
-        private void TranslateTextTab_Loaded(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        #endregion TextTranslation
-
+        // Removed all events for Text Translator
+        
         #region Settings
         private void TabItemAuthentication_Loaded(object sender, RoutedEventArgs e)
         {
@@ -765,17 +690,19 @@ namespace DocumentTranslation.GUI
             CategoryDocumentsClearButton.Visibility = Visibility.Hidden;
         }
 
-        private void CategoryTextClearButton_Click(object sender, RoutedEventArgs e)
-        {
-            CategoryTextBox.SelectedItem = null;
-            CategoryTextClearButton.Visibility = Visibility.Hidden;
-        }
+        // Removed list of check-boxes for "To Language"
+        //private void CategoryTextClearButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    CategoryTextBox.SelectedItem = null;
+        //    CategoryTextClearButton.Visibility = Visibility.Hidden;
+        //}
 
-        private void CategoryTextBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (CategoryTextBox.SelectedValue is not null) CategoryTextClearButton.Visibility = Visibility.Visible;
-            else CategoryTextClearButton.Visibility = Visibility.Hidden;
-        }
+        // Removed list of check-boxes for "To Language"
+        //private void CategoryTextBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
+        //    if (CategoryTextBox.SelectedValue is not null) CategoryTextClearButton.Visibility = Visibility.Visible;
+        //    else CategoryTextClearButton.Visibility = Visibility.Hidden;
+        //}
 
         private void CategoryDocumentsBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

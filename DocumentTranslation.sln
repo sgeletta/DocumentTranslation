@@ -40,6 +40,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "images", "images", "{C0EB30
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocumentTranslationService", "..\DocumentTranslationService\DocumentTranslationService.csproj", "{AABFD3BB-CC1E-4AA7-B792-72A1BC83A155}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextTranslation.GUI", "TextTranslation.GUI\TextTranslation.GUI.csproj", "{2A707F4F-B056-4395-96B6-A0B68AECCA1A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -78,6 +80,14 @@ Global
 		{AABFD3BB-CC1E-4AA7-B792-72A1BC83A155}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AABFD3BB-CC1E-4AA7-B792-72A1BC83A155}.Release|x86.ActiveCfg = Release|Any CPU
 		{AABFD3BB-CC1E-4AA7-B792-72A1BC83A155}.Release|x86.Build.0 = Release|Any CPU
+		{2A707F4F-B056-4395-96B6-A0B68AECCA1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A707F4F-B056-4395-96B6-A0B68AECCA1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A707F4F-B056-4395-96B6-A0B68AECCA1A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2A707F4F-B056-4395-96B6-A0B68AECCA1A}.Debug|x86.Build.0 = Debug|Any CPU
+		{2A707F4F-B056-4395-96B6-A0B68AECCA1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A707F4F-B056-4395-96B6-A0B68AECCA1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A707F4F-B056-4395-96B6-A0B68AECCA1A}.Release|x86.ActiveCfg = Release|Any CPU
+		{2A707F4F-B056-4395-96B6-A0B68AECCA1A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

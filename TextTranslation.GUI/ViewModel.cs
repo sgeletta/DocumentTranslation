@@ -8,16 +8,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace DocumentTranslation.GUI
+namespace TextTranslation.GUI
 {
     internal class ViewModel
     {
         public BindingList<Language> ToLanguageList { get; private set; } = new();
         public BindingList<Language> FromLanguageList { get; private set; } = new();
         internal static UISettings UISettings;
-
-        // Removed list of check-boxes for "To Language"
-        //public BindingList<Language> ToLanguageListForDocuments { get; private set; } = new();
+        public BindingList<Language> ToLanguageListForDocuments { get; private set; } = new();
         public BindingList<Language> FromLanguageListForDocuments { get; private set; } = new();
 
         public static DocTransAppSettings Settings
@@ -28,12 +26,8 @@ namespace DocumentTranslation.GUI
         internal static DocTransAppSettings localSettings;
         private static DocTransAppSettings keyVaultSettings;
 
-        // Removed list of check-boxes for "To Language"
-        //public Language FromLanguage { get; set; }
+        public Language FromLanguage { get; set; }
 
-        /// <summary>
-        /// Language to translate document into (Default = "Amharic" language)
-        /// </summary>
         public Language ToLanguage { get; set; } = new Language("amh", "Amharic");
         public BindingList<string> FilesToTranslate { get; private set; } = new();
         public string TargetFolder { get; set; }
@@ -76,7 +70,6 @@ namespace DocumentTranslation.GUI
                 OnLanguagesFailed?.Invoke(this, ex.Message);
             }
 
-            // Reset default "To Translate Language" when getting data from service
             var toLanguageData = documentTranslationService.Languages.Where(lang => lang.Value.Name.ToLower() == ToLanguage.Name.ToLower()).FirstOrDefault().Value;
             ToLanguage = toLanguageData == null ? ToLanguage : toLanguageData;
 
