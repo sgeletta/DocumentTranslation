@@ -1,13 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs" xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
   <?define doctr_TargetDir=$(var.doctr.TargetDir)?>
   <?define DocumentTranslationService_TargetDir=$(var.DocumentTranslationService.TargetDir)?>
   <?define TextTranslation.GUI_TargetDir=$(var.TextTranslation.GUI.TargetDir)?>
-  <Product Id="*" Name="Text Translation" Language="1033" Version="1.0.0.1" Manufacturer="Microsoft" UpgradeCode="cc63954a-c510-49da-af5f-dc82af6502e2">
-    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+  <Package Name="Text Translation" Language="1033" Version="1.0.0.1" Manufacturer="Microsoft" UpgradeCode="cc63954a-c510-49da-af5f-dc82af6502e2" InstallerVersion="200">
+    
 
-    <MajorUpgrade AllowDowngrades="yes" Schedule="afterInstallInitialize" IgnoreRemoveFailure="yes"/>
-    <Media Id="1" Cabinet ="TextTranslation.cab" EmbedCab="yes" />
+    <MajorUpgrade AllowDowngrades="yes" Schedule="afterInstallInitialize" IgnoreRemoveFailure="yes" />
+    <Media Id="1" Cabinet="TextTranslation.cab" EmbedCab="yes" />
     <WixVariable Id="WixUILicenseRtf" Value="LICENSE.rtf" />
     <Feature Id="ProductFeatureGUI" Title="Windows" Level="1">
       <ComponentGroupRef Id="ProductComponentsGUI" />
@@ -20,42 +19,33 @@
     </Feature>
 
     <UI>
-      <UIRef Id="WixUI_FeatureTree" />
-      <Publish Dialog="ExitDialog"
-          Control="Finish"
-          Event="DoAction"
-          Value="LaunchApplication">
-        WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 and NOT Installed
-      </Publish>
-    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Run Document Translation" />
-    <Property Id="WixShellExecTarget" Value="[#DocumentTranslation.GUI.exe]" />
+      <ui:WixUI Id="WixUI_FeatureTree" />
+      <Publish Dialog="ExitDialog" Control="Finish" Event="DoAction" Value="LaunchApplication" Condition="WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 and NOT Installed" />
+    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Run Text Translation" />
+    <Property Id="WixShellExecTarget" Value="[#TextTranslation.GUI.exe]" />
     </UI>
-    <CustomAction Id="LaunchApplication" BinaryKey="WixCA" DllEntry="WixShellExec" Impersonate="yes"/>
-  </Product>
+    <CustomAction Id="LaunchApplication" DllEntry="WixShellExec" Impersonate="yes" BinaryRef="Wix4UtilCA_X86" />
+  </Package>
 
 
   <Fragment>
-    <Directory Id="TARGETDIR" Name="SourceDir">
-      <Directory Id="ProgramFilesFolder">
+      <StandardDirectory Id="ProgramFilesFolder">
         <Directory Id="INSTALLFOLDER" Name="Text Translation" />
-      </Directory>
-      <Directory Id="ProgramMenuFolder">
-      </Directory>
-    </Directory>
-  </Fragment>
+      </StandardDirectory>
+      <StandardDirectory Id="ProgramMenuFolder">
+      </StandardDirectory>
+    </Fragment>
 
 
   <Fragment>
     <Icon Id="TextIcon" SourceFile="$(var.TextTranslation.GUI_TargetDir)DocumentTranslatorIcon_100.ico" />
 
-    <DirectoryRef Id="ProgramMenuFolder">
+    <StandardDirectory Id="ProgramMenuFolder">
       <Component Id="ApplicationShortcut" Guid="{3CBF3CA7-53A6-43E9-B60A-265A87749A7C}">
-        <Shortcut Id="ApplicationStartMenuShortcut" Icon="TextIcon"
-                  Name="Document Translation" Description="Document Translation with Microsoft Azure" Target="[INSTALLFOLDER]DocumentTranslation.GUI.exe"
-                  WorkingDirectory="INSTALLFOLDER" />
-        <RegistryValue Root="HKCU" Key="Software\Microsoft\Translator\DocumentTranslation" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+        <Shortcut Id="ApplicationStartMenuShortcut" Icon="TextIcon" Name="Text Translation" Description="Text Translation with Microsoft Azure" Target="[INSTALLFOLDER]TextTranslation.GUI.exe" WorkingDirectory="INSTALLFOLDER" />
+        <RegistryValue Root="HKCU" Key="Software\Microsoft\Translator\TextTranslation" Name="installed" Type="integer" Value="1" KeyPath="yes" />
       </Component>
-    </DirectoryRef>
+    </StandardDirectory>
   </Fragment>
 
 
@@ -67,18 +57,18 @@
       <Component Id="DocumentTranslationService.dll" Guid="54e6bc61-8bb8-4d5e-89d4-a73128f9a3d1">
         <File Id="DocumentTranslationService.dll" Name="DocumentTranslationService.dll" Source="$(var.DocumentTranslationService_TargetDir)DocumentTranslationService.dll" />
       </Component>
-      <Component Id="DocumentTranslation.GUI.dll" Guid="c3d60c1e-3c17-4f28-9aa5-6d36d07659f6">
-        <File Id="DocumentTranslation.GUI.dll" Name="DocumentTranslation.GUI.dll" Source="$(var.DocumentTranslation.GUI_TargetDir)DocumentTranslation.GUI.dll" />
+      <Component Id="TextTranslation.GUI.dll" Guid="c3d60c1e-3c17-4f28-9aa5-6d36d07659f6">
+        <File Id="TextTranslation.GUI.dll" Name="TextTranslation.GUI.dll" Source="$(var.TextTranslation.GUI_TargetDir)TextTranslation.GUI.dll" />
       </Component>
-      <Component Id="DocumentTranslation.GUI.exe" Guid="C93A0556-DA3F-4DCA-85A4-D7759C224659">
-        <File Id="DocumentTranslation.GUI.exe" Name="DocumentTranslation.GUI.exe" Source="$(var.DocumentTranslation.GUI_TargetDir)DocumentTranslation.GUI.exe" />
+      <Component Id="TextTranslation.GUI.exe" Guid="C93A0556-DA3F-4DCA-85A4-D7759C224659">
+        <File Id="TextTranslation.GUI.exe" Name="TextTranslation.GUI.exe" Source="$(var.TextTranslation.GUI_TargetDir)TextTranslation.GUI.exe" />
       </Component>
     </ComponentGroup>
     <ComponentGroup Id="ProductComponentsCLI" Directory="INSTALLFOLDER">
       <Component Id="doctr.dll" Guid="8325feec-d2d2-4058-886e-46face493d14">
         <File Id="doctr.dll" Name="doctr.dll" Source="$(var.doctr_TargetDir)doctr.dll" />
       </Component>
-      <Component Id="doctr.exe" Guid="AD28EAB5-087B-4985-A54F-485D08F990E8" >
+      <Component Id="doctr.exe" Guid="AD28EAB5-087B-4985-A54F-485D08F990E8">
         <File Id="doctr.exe" Name="doctr.exe" Source="$(var.doctr_TargetDir)doctr.exe" />
       </Component>
       <Component Id="McMaster.Extensions.CommandLineUtils.dll" Guid="198f2c2d-e585-4a08-af76-7eed9e77f922">

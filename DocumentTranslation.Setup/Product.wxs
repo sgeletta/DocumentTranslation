@@ -1,13 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs" xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
   <?define doctr_TargetDir=$(var.doctr.TargetDir)?>
   <?define DocumentTranslationService_TargetDir=$(var.DocumentTranslationService.TargetDir)?>
   <?define DocumentTranslation.GUI_TargetDir=$(var.DocumentTranslation.GUI.TargetDir)?>
-  <Product Id="*" Name="Document Translation" Language="1033" Version="1.0.0.1" Manufacturer="Microsoft" UpgradeCode="cc63954a-c510-49da-af5f-dc82af6502e1">
-    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+  <Package Name="Document Translation" Language="1033" Version="1.0.0.1" Manufacturer="Microsoft" UpgradeCode="cc63954a-c510-49da-af5f-dc82af6502e1" InstallerVersion="200">
+    
 
-    <MajorUpgrade AllowDowngrades="yes" Schedule="afterInstallInitialize" IgnoreRemoveFailure="yes"/>
-    <Media Id="1" Cabinet ="DocumentTranslation.cab" EmbedCab="yes" />
+    <MajorUpgrade AllowDowngrades="yes" Schedule="afterInstallInitialize" IgnoreRemoveFailure="yes" />
+    <Media Id="1" Cabinet="DocumentTranslation.cab" EmbedCab="yes" />
     <WixVariable Id="WixUILicenseRtf" Value="LICENSE.rtf" />
     <Feature Id="ProductFeatureGUI" Title="Windows" Level="1">
       <ComponentGroupRef Id="ProductComponentsGUI" />
@@ -20,42 +19,33 @@
     </Feature>
 
     <UI>
-      <UIRef Id="WixUI_FeatureTree" />
-      <Publish Dialog="ExitDialog"
-          Control="Finish"
-          Event="DoAction"
-          Value="LaunchApplication">
-        WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 and NOT Installed
-      </Publish>
+      <ui:WixUI Id="WixUI_FeatureTree" />
+      <Publish Dialog="ExitDialog" Control="Finish" Event="DoAction" Value="LaunchApplication" Condition="WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 and NOT Installed" />
     <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Run Document Translation" />
     <Property Id="WixShellExecTarget" Value="[#DocumentTranslation.GUI.exe]" />
     </UI>
-    <CustomAction Id="LaunchApplication" BinaryKey="WixCA" DllEntry="WixShellExec" Impersonate="yes"/>
-  </Product>
+    <CustomAction Id="LaunchApplication" DllEntry="WixShellExec" Impersonate="yes" BinaryRef="Wix4UtilCA_X86" />
+  </Package>
 
 
   <Fragment>
-    <Directory Id="TARGETDIR" Name="SourceDir">
-      <Directory Id="ProgramFilesFolder">
+      <StandardDirectory Id="ProgramFilesFolder">
         <Directory Id="INSTALLFOLDER" Name="Document Translation" />
-      </Directory>
-      <Directory Id="ProgramMenuFolder">
-      </Directory>
-    </Directory>
-  </Fragment>
+      </StandardDirectory>
+      <StandardDirectory Id="ProgramMenuFolder">
+      </StandardDirectory>
+    </Fragment>
 
 
   <Fragment>
     <Icon Id="DocumentIcon" SourceFile="$(var.DocumentTranslation.GUI_TargetDir)DocumentTranslatorIcon_100.ico" />
 
-    <DirectoryRef Id="ProgramMenuFolder">
+    <StandardDirectory Id="ProgramMenuFolder">
       <Component Id="ApplicationShortcut" Guid="{3CBF3CA7-53A6-43E9-B60A-265A87749A7C}">
-        <Shortcut Id="ApplicationStartMenuShortcut" Icon="DocumentIcon"
-                  Name="Document Translation" Description="Document Translation with Microsoft Azure" Target="[INSTALLFOLDER]DocumentTranslation.GUI.exe"
-                  WorkingDirectory="INSTALLFOLDER" />
+        <Shortcut Id="ApplicationStartMenuShortcut" Icon="DocumentIcon" Name="Document Translation" Description="Document Translation with Microsoft Azure" Target="[INSTALLFOLDER]DocumentTranslation.GUI.exe" WorkingDirectory="INSTALLFOLDER" />
         <RegistryValue Root="HKCU" Key="Software\Microsoft\Translator\DocumentTranslation" Name="installed" Type="integer" Value="1" KeyPath="yes" />
       </Component>
-    </DirectoryRef>
+    </StandardDirectory>
   </Fragment>
 
 
@@ -78,7 +68,7 @@
       <Component Id="doctr.dll" Guid="8325feec-d2d2-4058-886e-46face493d14">
         <File Id="doctr.dll" Name="doctr.dll" Source="$(var.doctr_TargetDir)doctr.dll" />
       </Component>
-      <Component Id="doctr.exe" Guid="AD28EAB5-087B-4985-A54F-485D08F990E8" >
+      <Component Id="doctr.exe" Guid="AD28EAB5-087B-4985-A54F-485D08F990E8">
         <File Id="doctr.exe" Name="doctr.exe" Source="$(var.doctr_TargetDir)doctr.exe" />
       </Component>
       <Component Id="McMaster.Extensions.CommandLineUtils.dll" Guid="198f2c2d-e585-4a08-af76-7eed9e77f922">
