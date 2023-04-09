@@ -3,6 +3,9 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DefineConstants>Debug</DefineConstants>
   </PropertyGroup>
+	<PropertyGroup>
+		<OutputName>DocTransAm.Setup</OutputName>
+	</PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\DocumentTranslationService\DocumentTranslationService.csproj">
       <Name>DocumentTranslationService</Name>

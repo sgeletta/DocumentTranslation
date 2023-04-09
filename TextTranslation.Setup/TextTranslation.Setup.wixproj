@@ -1,7 +1,7 @@
 ﻿<Project>
   <Import Project="Sdk.props" Sdk="WixToolset.Sdk" Version="4.0.0" />
   <PropertyGroup>
-    <OutputName>TextTranslation.Setup</OutputName>
+    <OutputName>TextTransAm.Setup</OutputName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DefineConstants>Debug</DefineConstants>
@@ -21,7 +21,7 @@
   <ItemGroup>
     <Content Include="LICENSE.rtf" />
     <Content Include="ZipItUp.cmd" />
-  </ItemGroup>AS
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="WixToolset.Util.wixext" Version="4.0.0" />
     <PackageReference Include="WixToolset.UI.wixext" Version="4.0.0" />
