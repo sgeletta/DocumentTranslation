@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-16"?>
+<Configuration xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DeployedProjects>
+    <string>TextTranslation.GUI\TextTranslation.GUI.csproj</string>
+    <string>DocumentTranslation.GUI\DocumentTranslation.GUI.csproj</string>
+  </DeployedProjects>
+  <DirectoryMappings>
+    <Item Key="" Value="INSTALLFOLDER" />
+  </DirectoryMappings>
+  <FileMappings />
+  <DeploySymbols>false</DeploySymbols>
+  <DeployLocalizations>true</DeployLocalizations>
+  <DeployExternalLocalizations>false</DeployExternalLocalizations>
+  <ExcludedProjectItems>-</ExcludedProjectItems>
+</Configuration>

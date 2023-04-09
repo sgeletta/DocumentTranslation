@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>3.10</ProductVersion>
-    <ProjectGuid>ed9deeb6-3e2d-47ac-979d-39294652c3f2</ProjectGuid>
+    <ProjectGuid>{00ba2a2a-7712-4a87-8706-fc96e5bd402c}</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
     <OutputName>DocumentTranslation.Setup</OutputName>
     <OutputType>Package</OutputType>
