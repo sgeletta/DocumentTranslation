@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -33,7 +34,9 @@ namespace DocumentTranslation.GUI
             AppSettingsSetter.SettingsReadComplete += AppSettingsSetter_SettingsReadComplete;
             ViewModel = viewModel;
             fromLanguageBoxDocuments.ItemsSource = ViewModel.FromLanguageListForDocuments;
-            CategoryDocumentsBox.ItemsSource = ViewModel.categories.MyCategoryList;
+
+            // Catagory is removed
+            //CategoryDocumentsBox.ItemsSource = ViewModel.categories.MyCategoryList;
         }
 
 
@@ -56,7 +59,7 @@ namespace DocumentTranslation.GUI
             //else fromLanguageBox.SelectedIndex = 0;
             if (ViewModel.UISettings.lastFromLanguageDocuments is not null)
                 fromLanguageBoxDocuments.SelectedValue = ViewModel.UISettings.lastFromLanguageDocuments;
-            else fromLanguageBoxDocuments.SelectedIndex = 0;
+            else fromLanguageBoxDocuments.SelectedValue = ViewModel.FromLanguageList.Where(x => x.LangCode == "en-us");
 
             // Removed multiple To language support
             //_ = SelectedToLanguages();
@@ -115,7 +118,9 @@ namespace DocumentTranslation.GUI
                 StatusBarText1.Text = Properties.Resources.msg_TestFailed;
                 StatusBarText2.Text = ex.Message;
             }
-            CategoryDocumentsBox.SelectedValue = ViewModel.UISettings.lastCategoryDocuments;
+
+            // Removed catagory option
+            //CategoryDocumentsBox.SelectedValue = ViewModel.UISettings.lastCategoryDocuments;
             //CategoryTextBox.SelectedValue = ViewModel.UISettings.lastCategoryText;
             ViewModel_OnLanguagesUpdate(this, EventArgs.Empty);
         }
@@ -128,8 +133,10 @@ namespace DocumentTranslation.GUI
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (CategoryDocumentsBox.SelectedItem is not null) ViewModel.UISettings.lastCategoryDocuments = ((MyCategory)CategoryDocumentsBox.SelectedItem).Name ?? string.Empty;
-            else ViewModel.UISettings.lastCategoryDocuments = null;
+            // Removed catagory options
+            //if (CategoryDocumentsBox.SelectedItem is not null) ViewModel.UISettings.lastCategoryDocuments = ((MyCategory)CategoryDocumentsBox.SelectedItem).Name ?? string.Empty;
+            //else ViewModel.UISettings.lastCategoryDocuments = null;
+
             ViewModel.SaveUISettings();
         }
 
@@ -322,8 +329,11 @@ namespace DocumentTranslation.GUI
             ViewModel.UISettings.lastToLanguagesDocuments.Clear();
             ViewModel.UISettings.lastToLanguagesDocuments.Add(ViewModel.ToLanguage.LangCode);
             ViewModel.SaveUISettings();
-            if (CategoryDocumentsBox.SelectedItem is not null) ViewModel.documentTranslationService.Category = ((MyCategory)CategoryDocumentsBox.SelectedItem).ID;
-            else ViewModel.documentTranslationService.Category = null;
+
+            // Removed support for catagory
+            //if (CategoryDocumentsBox.SelectedItem is not null) ViewModel.documentTranslationService.Category = ((MyCategory)CategoryDocumentsBox.SelectedItem).ID;
+            //else ViewModel.documentTranslationService.Category = null;
+
             DocumentTranslationBusiness documentTranslationBusiness = new(ViewModel.documentTranslationService);
             documentTranslationBusiness.OnUploadStart += DocumentTranslationBusiness_OnUploadStart;
             documentTranslationBusiness.OnUploadComplete += DocumentTranslationBusiness_OnUploadComplete;
@@ -653,42 +663,42 @@ namespace DocumentTranslation.GUI
             StatusBarSText1.Text = string.Empty;
         }
 
-        private void CategoriesTab_Loaded(object sender, RoutedEventArgs e)
-        {
-            CategoriesGridView.AllowUserToAddRows = true;
-            CategoriesGridView.EditMode = DataGridViewEditMode.EditOnKeystrokeOrF2;
-            CategoriesGridView.DataSource = ViewModel.categories.MyCategoryList;
-            CategoriesGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            CategoriesGridView.Columns[0].FillWeight = 2;
-            CategoriesGridView.Columns[0].HeaderText = Properties.Resources.label_CategoryName;
-            CategoriesGridView.Columns[1].FillWeight = 3;
-            CategoriesGridView.Columns[1].HeaderText = Properties.Resources.label_CategoryId;
-        }
+        //private void CategoriesTab_Loaded(object sender, RoutedEventArgs e)
+        //{
+        //    CategoriesGridView.AllowUserToAddRows = true;
+        //    CategoriesGridView.EditMode = DataGridViewEditMode.EditOnKeystrokeOrF2;
+        //    CategoriesGridView.DataSource = ViewModel.categories.MyCategoryList;
+        //    CategoriesGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+        //    CategoriesGridView.Columns[0].FillWeight = 2;
+        //    CategoriesGridView.Columns[0].HeaderText = Properties.Resources.label_CategoryName;
+        //    CategoriesGridView.Columns[1].FillWeight = 3;
+        //    CategoriesGridView.Columns[1].HeaderText = Properties.Resources.label_CategoryId;
+        //}
 
-        private void AddCategoryButton_Click(object sender, RoutedEventArgs e)
-        {
-            ViewModel.AddCategory(CategoriesGridView.SelectedCells);
-        }
+        //private void AddCategoryButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    ViewModel.AddCategory(CategoriesGridView.SelectedCells);
+        //}
 
-        private void DeleteCategoryButton_Click(object sender, RoutedEventArgs e)
-        {
-            ViewModel.DeleteCategory(CategoriesGridView.SelectedCells);
-        }
+        //private void DeleteCategoryButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    ViewModel.DeleteCategory(CategoriesGridView.SelectedCells);
+        //}
 
-        private async void SaveCategoriesButton_Click(object sender, RoutedEventArgs e)
-        {
-            SavedCategoriesText.Visibility = Visibility.Visible;
-            CategoriesGridView.EndEdit();
-            ViewModel.SaveCategories();
-            await Task.Delay(500);
-            SavedCategoriesText.Visibility = Visibility.Hidden;
-        }
+        //private async void SaveCategoriesButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    SavedCategoriesText.Visibility = Visibility.Visible;
+        //    CategoriesGridView.EndEdit();
+        //    ViewModel.SaveCategories();
+        //    await Task.Delay(500);
+        //    SavedCategoriesText.Visibility = Visibility.Hidden;
+        //}
 
-        private void CategoryDocumentsClearButton_Click(object sender, RoutedEventArgs e)
-        {
-            CategoryDocumentsBox.SelectedItem = null;
-            CategoryDocumentsClearButton.Visibility = Visibility.Hidden;
-        }
+        //private void CategoryDocumentsClearButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    CategoryDocumentsBox.SelectedItem = null;
+        //    CategoryDocumentsClearButton.Visibility = Visibility.Hidden;
+        //}
 
         // Removed list of check-boxes for "To Language"
         //private void CategoryTextClearButton_Click(object sender, RoutedEventArgs e)
@@ -704,11 +714,11 @@ namespace DocumentTranslation.GUI
         //    else CategoryTextClearButton.Visibility = Visibility.Hidden;
         //}
 
-        private void CategoryDocumentsBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (CategoryDocumentsBox.SelectedValue is not null) CategoryDocumentsClearButton.Visibility = Visibility.Visible;
-            else CategoryDocumentsClearButton.Visibility = Visibility.Hidden;
-        }
+        //private void CategoryDocumentsBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
+        //    if (CategoryDocumentsBox.SelectedValue is not null) CategoryDocumentsClearButton.Visibility = Visibility.Visible;
+        //    else CategoryDocumentsClearButton.Visibility = Visibility.Hidden;
+        //}
 
         private void ExperimentalCheckbox_Checked(object sender, RoutedEventArgs e)
         {

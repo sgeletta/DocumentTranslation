@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -33,7 +34,9 @@ namespace TextTranslation.GUI
             AppSettingsSetter.SettingsReadComplete += AppSettingsSetter_SettingsReadComplete;
             ViewModel = viewModel;
             fromLanguageBox.ItemsSource = ViewModel.FromLanguageList;
-            CategoryTextBox.ItemsSource = ViewModel.categories.MyCategoryList;
+
+            // Removed UI support for Category text box
+            //CategoryTextBox.ItemsSource = ViewModel.categories.MyCategoryList;
         }
 
         private void ViewModel_OnKeyVaultAuthenticationStart(object sender, EventArgs e)
@@ -51,7 +54,8 @@ namespace TextTranslation.GUI
         {
             if (ViewModel.UISettings.lastFromLanguage is not null)
                 fromLanguageBox.SelectedValue = ViewModel.UISettings.lastFromLanguage;
-            else fromLanguageBox.SelectedIndex = 0;
+            //else fromLanguageBox.SelectedIndex = 0;
+            else fromLanguageBox.SelectedValue = ViewModel.FromLanguageList.Where(x => x.LangCode == "en-us");
         }
 
         private void AppSettingsSetter_SettingsReadComplete(object sender, EventArgs e)
@@ -91,7 +95,9 @@ namespace TextTranslation.GUI
                 StatusBarTText1.Text = Properties.Resources.msg_TestFailed;
                 StatusBarTText2.Text = ex.Message;
             }
-            CategoryTextBox.SelectedValue = ViewModel.UISettings.lastCategoryText;
+
+            // Removed UI Suport for Category
+            //CategoryTextBox.SelectedValue = ViewModel.UISettings.lastCategoryText;
             ViewModel_OnLanguagesUpdate(this, EventArgs.Empty);
         }
 
@@ -104,8 +110,10 @@ namespace TextTranslation.GUI
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (fromLanguageBox.SelectedIndex >= 0) ViewModel.UISettings.lastFromLanguage = fromLanguageBox.SelectedValue as string;
-            if (CategoryTextBox.SelectedItem is not null) ViewModel.UISettings.lastCategoryText = ((MyCategory)CategoryTextBox.SelectedItem).Name ?? string.Empty;
-            else ViewModel.UISettings.lastCategoryText = null;
+
+            // Removed UI Suport for Category
+            //if (CategoryTextBox.SelectedItem is not null) ViewModel.UISettings.lastCategoryText = ((MyCategory)CategoryTextBox.SelectedItem).Name ?? string.Empty;
+            //else ViewModel.UISettings.lastCategoryText = null;
             ViewModel.SaveUISettings();
         }
 
@@ -135,7 +143,8 @@ namespace TextTranslation.GUI
         #region TextTranslation
         private async void TranslateButton_Click(object sender, RoutedEventArgs e)
         {
-            ViewModel.documentTranslationService.Category = CategoryTextBox.SelectedItem is not null ? ((MyCategory)CategoryTextBox.SelectedItem).ID : null;
+            // Removed UI Suport for Category
+            //ViewModel.documentTranslationService.Category = CategoryTextBox.SelectedItem is not null ? ((MyCategory)CategoryTextBox.SelectedItem).ID : null;
             try
             {
                 outputBox.Text = await ViewModel.TranslateTextAsync(inputBox.Text, fromLanguageBox.SelectedValue as string, ViewModel.ToLanguage.LangCode);
@@ -299,48 +308,54 @@ namespace TextTranslation.GUI
             StatusBarSText1.Text = string.Empty;
         }
 
-        private void CategoriesTab_Loaded(object sender, RoutedEventArgs e)
-        {
-            CategoriesGridView.AllowUserToAddRows = true;
-            CategoriesGridView.EditMode = DataGridViewEditMode.EditOnKeystrokeOrF2;
-            CategoriesGridView.DataSource = ViewModel.categories.MyCategoryList;
-            CategoriesGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            CategoriesGridView.Columns[0].FillWeight = 2;
-            CategoriesGridView.Columns[0].HeaderText = Properties.Resources.label_CategoryName;
-            CategoriesGridView.Columns[1].FillWeight = 3;
-            CategoriesGridView.Columns[1].HeaderText = Properties.Resources.label_CategoryId;
-        }
+        // Removed UI Suport for Category
+        //private void CategoriesTab_Loaded(object sender, RoutedEventArgs e)
+        //{
+        //    CategoriesGridView.AllowUserToAddRows = true;
+        //    CategoriesGridView.EditMode = DataGridViewEditMode.EditOnKeystrokeOrF2;
+        //    CategoriesGridView.DataSource = ViewModel.categories.MyCategoryList;
+        //    CategoriesGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+        //    CategoriesGridView.Columns[0].FillWeight = 2;
+        //    CategoriesGridView.Columns[0].HeaderText = Properties.Resources.label_CategoryName;
+        //    CategoriesGridView.Columns[1].FillWeight = 3;
+        //    CategoriesGridView.Columns[1].HeaderText = Properties.Resources.label_CategoryId;
+        //}
 
-        private void AddCategoryButton_Click(object sender, RoutedEventArgs e)
-        {
-            ViewModel.AddCategory(CategoriesGridView.SelectedCells);
-        }
+        // Removed UI Suport for Category
+        //private void AddCategoryButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    ViewModel.AddCategory(CategoriesGridView.SelectedCells);
+        //}
 
-        private void DeleteCategoryButton_Click(object sender, RoutedEventArgs e)
-        {
-            ViewModel.DeleteCategory(CategoriesGridView.SelectedCells);
-        }
+        // Removed UI Suport for Category
+        //private void DeleteCategoryButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    ViewModel.DeleteCategory(CategoriesGridView.SelectedCells);
+        //}
 
-        private async void SaveCategoriesButton_Click(object sender, RoutedEventArgs e)
-        {
-            SavedCategoriesText.Visibility = Visibility.Visible;
-            CategoriesGridView.EndEdit();
-            ViewModel.SaveCategories();
-            await Task.Delay(500);
-            SavedCategoriesText.Visibility = Visibility.Hidden;
-        }
+        // Removed UI Suport for Category
+        //private async void SaveCategoriesButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    SavedCategoriesText.Visibility = Visibility.Visible;
+        //    CategoriesGridView.EndEdit();
+        //    ViewModel.SaveCategories();
+        //    await Task.Delay(500);
+        //    SavedCategoriesText.Visibility = Visibility.Hidden;
+        //}
 
-        private void CategoryTextClearButton_Click(object sender, RoutedEventArgs e)
-        {
-            CategoryTextBox.SelectedItem = null;
-            CategoryTextClearButton.Visibility = Visibility.Hidden;
-        }
+        // Removed UI Suport for Category
+        //private void CategoryTextClearButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    CategoryTextBox.SelectedItem = null;
+        //    CategoryTextClearButton.Visibility = Visibility.Hidden;
+        //}
 
-        private void CategoryTextBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (CategoryTextBox.SelectedValue is not null) CategoryTextClearButton.Visibility = Visibility.Visible;
-            else CategoryTextClearButton.Visibility = Visibility.Hidden;
-        }
+        // Removed UI Suport for Category
+        //private void CategoryTextBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
+        //    if (CategoryTextBox.SelectedValue is not null) CategoryTextClearButton.Visibility = Visibility.Visible;
+        //    else CategoryTextClearButton.Visibility = Visibility.Hidden;
+        //}
 
         private void ExperimentalCheckbox_Checked(object sender, RoutedEventArgs e)
         {

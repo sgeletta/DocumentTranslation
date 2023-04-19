@@ -46,7 +46,9 @@ namespace DocumentTranslation.GUI
         public event EventHandler<string> OnLanguagesFailed;
 
         internal DocumentTranslationService.Core.DocumentTranslationService documentTranslationService = new();
-        public readonly Categories categories = new();
+
+        // Removed support for catagories
+        //public readonly Categories categories = new();
 
         public ViewModel()
         {
@@ -218,24 +220,26 @@ namespace DocumentTranslation.GUI
             return filterBuilder.ToString();
         }
         #endregion
+
+        // Removed support for catagories
         #region Settings.Categories
 
-        internal void AddCategory(DataGridViewSelectedCellCollection selectedCells)
-        {
-            foreach (DataGridViewCell cell in selectedCells)
-                categories.MyCategoryList.Insert(cell.RowIndex, new MyCategory(Properties.Resources.label_NewCategorySample, Properties.Resources.label_NewCategoryIDSample));
-        }
+        //internal void AddCategory(DataGridViewSelectedCellCollection selectedCells)
+        //{
+        //    foreach (DataGridViewCell cell in selectedCells)
+        //        categories.MyCategoryList.Insert(cell.RowIndex, new MyCategory(Properties.Resources.label_NewCategorySample, Properties.Resources.label_NewCategoryIDSample));
+        //}
 
-        internal void DeleteCategory(DataGridViewSelectedCellCollection selectedCells)
-        {
-            foreach (DataGridViewCell cell in selectedCells)
-                categories.MyCategoryList.RemoveAt(cell.RowIndex);
-        }
+        //internal void DeleteCategory(DataGridViewSelectedCellCollection selectedCells)
+        //{
+        //    foreach (DataGridViewCell cell in selectedCells)
+        //        categories.MyCategoryList.RemoveAt(cell.RowIndex);
+        //}
 
-        internal void SaveCategories()
-        {
-            categories.Write();
-        }
+        //internal void SaveCategories()
+        //{
+        //    categories.Write();
+        //}
 
         #endregion
     }

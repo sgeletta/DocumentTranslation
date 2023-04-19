@@ -14,14 +14,15 @@
         <TabControl>
             <TabItem Header="{x:Static resx:Resources.tabTitle_TranslateText}" Width="200" x:Name="TranslateTextTab" Loaded="TranslateTextTab_Loaded">
                 <Grid>
-                    <StackPanel x:Name="Fields" Orientation="Horizontal" Margin="20" Height="22" VerticalAlignment="Top" Grid.ColumnSpan="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="266*"/>
+                        <ColumnDefinition Width="579*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel x:Name="Fields" Orientation="Horizontal" Margin="20,20,20,0" Height="22" VerticalAlignment="Top" Grid.ColumnSpan="2">
                         <Label Content="{x:Static resx:Resources.label_From}" HorizontalAlignment="Left" VerticalAlignment="Top"  Margin="0,0,10,0" Padding="2"/>
                         <ComboBox x:Name="fromLanguageBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" ItemsSource="{Binding FromLanguageList}" DisplayMemberPath="Name" SelectedValue="{Binding FromLanguage.LangCode}" SelectedValuePath="LangCode" SelectionChanged="FromLanguageBox_SelectionChanged" />
                         <Label Content="{x:Static resx:Resources.label_To}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,0" Padding="2"/>
                         <Label VerticalAlignment="Top" Content="{Binding ToLanguage.Name, FallbackValue=Amharic}" HorizontalAlignment="Left" Margin="0,0,40,0" Padding="2" x:Name="toLanguage"/>
-                        <Label Content="{x:Static resx:Resources.label_Category}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,0" Padding="2" ToolTip="{x:Static resx:Resources.tooltip_Category}"/>
-                        <ComboBox x:Name="CategoryTextBox" HorizontalAlignment="Right"  VerticalAlignment="Top" Width="150" DisplayMemberPath="Name" SelectedValuePath="Name" SelectionChanged="CategoryTextBox_SelectionChanged" ToolTip="{x:Static resx:Resources.tooltip_Category}"/>
-                        <Button x:Name="CategoryTextClearButton" Content="{x:Static resx:Resources.button_Clear}" HorizontalAlignment="Right"  VerticalAlignment="Top" Margin="10,0" Visibility="Hidden" Padding="2" Click="CategoryTextClearButton_Click" ToolTip="{x:Static resx:Resources.tooltip_CategoryClear}"/>
                     </StackPanel>
                     <Grid Margin="20,50,20,25" Grid.ColumnSpan="2">
                         <Grid.RowDefinitions>
@@ -42,7 +43,7 @@
                             <Button x:Name="translateButton" Content="{x:Static resx:Resources.button_Translate}" Width="100" Click="TranslateButton_Click" Padding="2"/>
                         </StackPanel>
                     </Grid>
-                    <StatusBar VerticalAlignment="Bottom">
+                    <StatusBar VerticalAlignment="Bottom" Grid.ColumnSpan="2">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock x:Name="StatusBarTText1" Margin="10,0,0,0"/>
                             <TextBlock x:Name="StatusBarTText2" Margin="10,0,0,0"/>
@@ -108,25 +109,6 @@
                                 <StackPanel Grid.Row="10" Orientation="Horizontal" Grid.ColumnSpan="2" HorizontalAlignment="Right">
                                     <Button x:Name="TestSettingsButton" Content="{x:Static resx:Resources.button_Test}" Margin="5" Padding="2" Width="100" Click="TestSettingsButton_Click" ToolTip="{x:Static resx:Resources.tooltip_TestSettings}"/>
                                     <Button x:Name="SaveSettingsButton" Content="{x:Static resx:Resources.button_Save}" Margin="5" Padding="2" Width="100" Click="SaveSettingsButton_Click" ToolTip="{x:Static resx:Resources.tooltip_SaveSettings}"/>
-                                </StackPanel>
-                            </Grid>
-                        </TabItem>
-                        <TabItem x:Name="CategoriesTab" Header="{x:Static resx:Resources.tabTitle_Categories}" Width="140" Loaded="CategoriesTab_Loaded">
-                            <Grid Margin="20">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" MinHeight="50"/>
-                                    <RowDefinition/>
-                                    <RowDefinition Height="32"/>
-                                </Grid.RowDefinitions>
-                                <TextBlock Text="{x:Static resx:Resources.text_Categories}" TextWrapping="Wrap"/>
-                                <WindowsFormsHost Grid.Row="1">
-                                    <wf:DataGridView x:Name="CategoriesGridView" RowHeadersVisible="False" Padding="2,2,2,2"/>
-                                </WindowsFormsHost>
-                                <StackPanel Grid.Row="2" Orientation="Horizontal">
-                                    <Button x:Name="AddCategoryButton" Content="{x:Static resx:Resources.button_Add}" Margin="0,5" Padding="2" Width="100" Click="AddCategoryButton_Click"/>
-                                    <Button x:Name="DeleteCategoryButton" Content="{x:Static resx:Resources.button_Delete}" Margin="5" Padding="2" Width="100" Click="DeleteCategoryButton_Click"/>
-                                    <Button x:Name="SaveCategoriesButton" Content="{x:Static resx:Resources.button_Save}" Margin="5" Padding="2" Width="100" Click="SaveCategoriesButton_Click"/>
-                                    <TextBlock x:Name="SavedCategoriesText" Text="{x:Static resx:Resources.msg_CategoriesSaved}" Margin="5" Padding="2" Visibility="Hidden"/>
                                 </StackPanel>
                             </Grid>
                         </TabItem>
