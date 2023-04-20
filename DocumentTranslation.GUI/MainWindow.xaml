@@ -165,48 +165,6 @@
                     </StatusBar>
                 </Grid>
             </TabItem>
-            <TabItem Header="?" x:Name="tabHelp" Width="50">
-                <TabControl>
-                    <TabItem Header="{x:Static resx:Resources.tabTitle_Documentation}" x:Name="tabDocs" Width="140">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="22"/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0" HorizontalAlignment="Right" Margin="10,0,0,0">
-                            <Hyperlink NavigateUri="https://microsofttranslator.github.io/DocumentTranslation/" RequestNavigate="Hyperlink_RequestNavigate"><Run Text="{x:Static resx:Resources.text_OpenInBrowser}"/></Hyperlink>
-                            </TextBlock>
-                            <WebBrowser Grid.Row="1" Source="https://microsofttranslator.github.io/DocumentTranslation/" Margin="0,26,0,-26" />
-                        </Grid>
-                    </TabItem>
-                    <TabItem Header="{x:Static resx:Resources.tabTitle_Languages}" x:Name="tabLanguages" Width="140" Loaded="TabLanguages_Loaded">
-                        <Grid Margin="20,20,20,20">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0" Text="{x:Static resx:Resources.text_LanguageCodes}" TextWrapping="Wrap" Margin="0,0,0,10"/>
-                            <DataGrid Grid.Row="1" x:Name="LanguagesDataGrid" />
-                        </Grid>
-                    </TabItem>
-                    <TabItem Header="{x:Static resx:Resources.tabTitle_About}" x:Name="aboutBox" Width="140">
-                        <Grid Margin="20,20,20,20">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static resx:Resources.text_Version}" HorizontalAlignment="Left"/>
-                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{x:Static resx:Resources.Version}" HorizontalAlignment="Left" Margin="10,0,0,0"/>
-                            <TextBlock Grid.Row="1" Grid.Column="0" Text="{x:Static resx:Resources.text_BuildDate}" HorizontalAlignment="Left"/>
-                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{x:Static resx:Resources.BuildDate}" HorizontalAlignment="Left" Margin="10,0,0,0"/>
-                        </Grid>
-                    </TabItem>
-                </TabControl>
-            </TabItem>
         </TabControl>
     </Grid>
 </Window>

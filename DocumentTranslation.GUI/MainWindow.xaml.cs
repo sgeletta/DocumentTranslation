@@ -775,10 +775,11 @@ namespace DocumentTranslation.GUI
         }
         #endregion Settings
 
-        private void TabLanguages_Loaded(object sender, RoutedEventArgs e)
-        {
-            LanguagesDataGrid.AutoGenerateColumns = true;
-            LanguagesDataGrid.ItemsSource = ViewModel.ToLanguageList;
-        }
+        // Removed HELP tab
+        //private void TabLanguages_Loaded(object sender, RoutedEventArgs e)
+        //{
+        //    LanguagesDataGrid.AutoGenerateColumns = true;
+        //    LanguagesDataGrid.ItemsSource = ViewModel.ToLanguageList;
+        //}
     }
 }
